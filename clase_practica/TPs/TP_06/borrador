@@ -1,0 +1,61 @@
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+#define FIL 6
+#define COL 5
+#define PISO 0
+#define TECHO 9
+
+int promedio(int filas, int columnas, const int matriz[][columnas], int w, int iFijo, int jFijo){
+
+   int suma = 0, contador = 0;
+   for (int i = (MAX(0, iFijo - w)); i <= (MIN(iFijo + w, filas -1)); i++){
+      for (int j = (MAX(0, jFijo - w)); j <= (MIN(jFijo + w, columnas -1)); j++){
+         suma += matriz[i][j];
+         contador++;
+      }
+   }
+   return suma / contador;
+}
+
+void suavizar(int filas, int columnas, int matriz[][columnas], int w){
+   if (w < 3 || w % 2 == 0)
+      return;
+
+   w /= 2;
+
+   int matrizAux[filas][columnas]; 
+   for (int i = 0; i < filas; i++){
+      for (int j = 0; j < columnas; j++){
+         matrizAux[i][j] = promedio(filas, columnas, matriz, w, i, j);
+      }
+   }
+
+   for (int i = 0; i < filas; i++){
+      for (int j = 0; j < columnas; j++){
+         matriz[i][j] = matrizAux[i][j];
+      }
+   }
+}
+
+int main(void){
+
+   int matriz[6][5] = {
+    {10, 10, 20, 23, 24},
+    {10, 12, 18, 25, 23},
+    {12, 14, 18, 26, 22},
+    {12, 14, 19, 20, 22},
+    {13, 16, 19, 20, 22},
+    {14, 14, 19, 21, 23}};
+
+   impresionMatriz(FIL, COL, matriz);
+
+   printf("\n");
+
+   suavizar(FIL, COL, matriz, 3);
+   impresionMatriz(FIL, COL, matriz);
+
+}
+
+#define ES_VOCAL(c) ( (c)=='a' || (c)=='e' || (c)=='i' || (c)=='o' || (c)=='u' \
+                   || (c)=='A' || (c)=='E' || (c)=='I' || (c)=='O' || (c)=='U' )

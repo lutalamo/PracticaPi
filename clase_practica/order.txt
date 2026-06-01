@@ -1,0 +1,15 @@
+    l a s  b u e n a s  i d e a s  e s c a s e a n, s i
+    t a l  b u e n a s  i d.\0 
+
+i = 0 1 2
+j =   
+
+a = 1
+
+s[j] = s[i]
+j++
+
+ 0  1   2   3   4               m[][0]      cant = + 1
+ 2  0   0   0   0               
+
+
