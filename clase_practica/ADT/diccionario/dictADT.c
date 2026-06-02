@@ -1,6 +1,8 @@
+#include <stddef.h>
 #include <stdio.h>
 #include "./dictADT.h"
 #include <string.h>
+#include <ctype.h>
 #define LETTERS ('z'-'a'+1)
 #define BLOCK 10
 
@@ -24,35 +26,33 @@ struct dictCDT{
 };
 
 dictADT newDict(){
-    dictADT ans = malloc (sizeof(*ans));
-    
-    for (int i = 0; i < LETTERS; i++){
-        ans->letras[i].first = NULL;
-        ans->letras[i].dim = 0;
-    }
-    ans->cant = 0;
+    dictADT ans = calloc (1, sizeof(*ans));    
     return ans;
 }
 
-void freeWord(palabra word){
-    if (word.next == NULL) return;
-    palabra aux = word;
+static void freeWord(palabra * word){ // puntero, sino seria una copia
+    free(word->nombre);
+    free(word->definicion);
     free(word);
-    free
-    
 }
 
-void freeWordList (wordList wordList){
-    if (wordList.dim == 0) return;
-    
+static void freeWordList (wordList * wl){
+    palabra * current = wl->first;
+    while (current != NULL){
+        palabra * next = current->next;
+        freeWord(current);
+        current = next;
+    }
 }
 
 void freeDict(dictADT dict){
-    
+    for (int i = 0; i < LETTERS; i++){
+        freeWordList(&dict->letras[i]);
+    }
     free(dict);
 }
 
-static char * concatenaDef (char * defActual, char * newDef, size_t * len){
+static char * concatenaDef (char * defActual, const char * newDef, size_t * len){
     int j = 0;
     for (int i = 0; newDef[i] != '\0'; i++){
         if (j % BLOCK == 0){
@@ -62,6 +62,7 @@ static char * concatenaDef (char * defActual, char * newDef, size_t * len){
     }
     defActual[j] = '\0';
     *len = j;
+    return defActual;
 }
 
 static palabra * addRec 
@@ -93,3 +94,39 @@ void addDefinition (dictADT dict, const char* word, const char* deff){
     dict->cant += flag;
 }
 
+char * getDeff (const dictADT dict, const char* word){
+    //busco la pirmera letra de word y entro a esa lista 
+    int c = tolower(*word) - 'a';
+
+    palabra *aux = dict->letras[c].first;
+
+    while (aux != NULL){
+        int x = strcmp(word, aux->nombre);
+        if (x == 0) return aux->definicion;
+        if (x < 0) return NULL; //nos pasamos y no encontramos
+        aux = aux->next;
+    }
+    return NULL;
+}
+
+char ** wordsBeginWith (const dictADT dict, char letter, size_t * dim){
+    int c = tolower(letter) - 'a';
+    wordList * wl = &dict->letras[c];
+    if (wl->dim == 0) {
+        *dim = 0;
+        return NULL; // no hay palabras que empiezan con esa letra
+    }
+
+    char ** ans = malloc ((wl->dim + 1) * sizeof(*ans));
+
+    palabra * aux = wl->first;
+    int i=0;
+    while (aux != NULL) {
+        ans[i] = malloc((aux->nombre_len + 1) * sizeof(char));
+        strcpy(ans[i], aux->nombre);
+        aux = aux->next;
+        i++;
+    }
+    *dim = i;
+    return ans;
+}
