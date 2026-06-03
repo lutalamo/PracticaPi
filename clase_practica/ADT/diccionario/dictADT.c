@@ -130,3 +130,27 @@ char ** wordsBeginWith (const dictADT dict, char letter, size_t * dim){
     *dim = i;
     return ans;
 }
+
+static void copyWords (palabra * first, char ** ans, size_t *i){
+    palabra * aux = first;
+    while (aux != NULL){
+        ans[*i] = malloc (aux->nombre_len + 1);
+        strcpy(ans[*i], aux->nombre);
+        aux = aux->next;
+        (*i)++;
+    }
+}
+
+char ** words (const dictADT dict, size_t * dim){
+    if (dict->cant == 0){
+        *dim = 0;
+        return NULL;
+    }
+    char ** ans = malloc(dict->cant * sizeof(*ans));
+
+    int k = 0;
+    for (int i = 0; i < LETTERS; i++){
+        copyWords(dict->letras[i].first, ans, dim); 
+    }
+    return ans;
+}
