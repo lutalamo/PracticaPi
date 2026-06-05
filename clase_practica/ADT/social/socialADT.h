@@ -1,34 +1,41 @@
+
 typedef struct socialCDT * socialADT;
 
-typedef struct influencerData {
-    char * id;
-    size_t followers;
-} influencerData;
 
-socialADT newSocial(); // Implementar
+/* Crea un nuevo TAD vacío */
+socialADT newSocial();
 
-void freeSocial(socialADT social); // No implementar
-/**
-* Agrega un influencer
-* id: identifica al influencer
-* followers: cantidad de seguidores
-* El influencer no debería existir, pero eso el TAD no lo valida. Si ya existe lo
-* vuelve a agregar
-* Si followers es menor a 1000, no lo agrega
+
+/* Libera todos los recursos reservados por el TAD */
+void freeSocial(socialADT soc);
+
+
+/* Almacena una nueva persona. Si la persona existe, no hace nada
+** Guarda una copia del nombre, no simplemente el puntero */
+void addPerson(socialADT soc, const char * name);
+
+
+/* Si existe una persona con ese nombre, agrega la nueva relación
+** Si la persona no existe, no hace nada
+** Si related ya estaba relacionado, lo agrega repetido
+** Almacena una copia de related, no simplemente el puntero
+**
 */
-int addInfluencer(socialADT social, const char * id, size_t followers);
-/**
-* Le agrega una cantidad de seguidores al influencer. Si no existe retorna cero
+void addRelated(socialADT soc, const char * name, const char * related);
+
+
+/* Retorna una copia de los nombres relacionados con una persona
+** en orden alfabético.
+** Para marcar el final, después del último nombre se coloca NULL
+** Si la persona no existe, retorna un vector que sólo tiene a NULL como
+** elemento
 */
-int addFollowers(socialADT social, const char * id, size_t newFollowers); // NO implementar
-/**
-* Retorna un vector con los influencers que tienen "n miles" de seguidores
-* Por ejemplo si n es 1 los que tienen entre 1000 y 1999 seguidores
-* si n es 11, los que tienen entre 11000 y 11999 seguidores
-* si n es 0 o no hay influencers en ese rango, retorna NULL y asigna cero a *dim
-* En cada posición del vector deja una copia del id y la cantidad de seguidores
-* El vector debe estar ordenado en forma ascendente por cantidad de seguidores
-* Si dos o más influencers tienen la misma cantidad de seguidores no es necesario
-* desempatar por otro criterio
+char ** related(const socialADT soc, const char * person);
+
+
+/* Retorna una copia de los nombres de las personas en orden alfabético.
+** Para marcar el final, después del último nombre se coloca NULL
+** Si no hay personas, retorna un vector que sólo tiene a NULL como
+** elemento
 */
-influencerData * influencers(const socialADT social, size_t n, size_t * dim);
+char ** persons(const socialADT soc);
