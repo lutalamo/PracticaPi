@@ -66,18 +66,16 @@ int buscaEnDire (unsigned dim, char tablero[dim][dim], int pos_y, int pos_x){
     int f = pos_y + direcciones[k][0];
     int c = pos_x + direcciones[k][1];
 
-    while (pos_y >= 0 && pos_y < dim && pos_x >= 0 && pos_x < dim){
-      if (tablero[pos_y][pos_x] != ' '){
-        if (isupper(pieza) && islower(tablero[pos_y][pos_x])){
+    while (f >= 0 && f < dim && c >= 0 && c < dim){
+      if (tablero[f][c] != ' '){
+        if ((isupper(pieza) && islower(tablero[f][c])) || (islower(pieza) && isupper(tablero[f][c]))){
           count++;
         }
-        else if (islower(pieza) ){
-
-        }
+        break;
       }
 
-      pos_y += direcciones[k][0];
-      pos_x += direcciones[k][1];
+      f += direcciones[k][0];
+      c += direcciones[k][1];
     }
   }
   return count;
@@ -96,3 +94,26 @@ int damas (unsigned dim, char tablero[dim][dim]){
   }
   return count;
 }
+
+// ejercicio 11 - tipo parcial
+void ordenar (unsigned fils, unsigned cols, int matriz[fils][cols], unsigned col){
+    if (col > cols || col == 0) return;
+
+    int idx = col - 1;
+    
+    for (int i = 0; i < fils - 1; i++){
+        int minIdx = i;
+        for (int j = i + 1; j < fils; j++){
+            if (matriz[j][idx] < matriz[minIdx][idx]) {
+                minIdx = j;
+            }
+        }
+        // swap
+        for (int k = 0; k < cols; k++){
+            int tmp = matriz[i][k];
+            matriz[i][k] = matriz[minIdx][k];
+            matriz[minIdx][k] = tmp;
+        }
+    }
+}
+ 
