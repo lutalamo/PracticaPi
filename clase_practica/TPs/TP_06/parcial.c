@@ -1,6 +1,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #define DIRECCIONES 8
 
@@ -117,3 +118,78 @@ void ordenar (unsigned fils, unsigned cols, int matriz[fils][cols], unsigned col
     }
 }
  
+// ejercicio 12 - Matriz Traspuesta
+void traspuesta (unsigned dim, int matriz[dim][dim]){
+  for (int i = 0; i < dim; i++){
+    for (int j = i + 1; j < dim; j++){ // arranca desde i+1 para solo ver la mitad de arriba
+      int tmp = matriz[i][j];
+      matriz[i][j] = matriz[j][i];
+      matriz[j][i] = tmp;
+    }
+  }
+}
+
+// ejercicio 13 - producto de matrices cuadradas
+int suma (unsigned dim, const int m1[dim][dim], const int m2[dim][dim], int fila, int col){
+  int ans = 0;
+  for (int i = 0; i < dim; i++){
+    ans += m1[fila][i] * m2[i][col];
+  }
+  return ans;
+}
+
+void productoMat (unsigned dim, const int m1[dim][dim], const int m2[dim][dim], int ans[dim][dim]){
+  for (int i = 0; i < dim; i++){
+    for (int j = 0; j < dim; j++){
+         ans[i][j] = suma(dim, m1, m2, i, j);
+    }
+  }
+}
+
+// ejercicio 14 - interseccion de vectores - contiene
+int estaContenido (unsigned dim1, const int v1[dim1], unsigned dim2, const int v2[dim2]){
+  for (int i = 0; i < dim1; i++){
+    int flag = 0;
+    for (int j = 0; j < dim2; j++){
+      if (v1[i] == v2[j]){
+        flag = 1;
+        break;
+      }
+    }
+    if (!flag) return 0;
+  }
+  return 1;
+}
+
+int contiene (const int v1[], unsigned dim1, const int v2[], unsigned dim2){
+  if (estaContenido(dim1, v1, dim2, v2)) return 1;
+  if (estaContenido(dim2, v2, dim1, v1)) return 2;
+  return 0;
+}
+
+// ejercicio 15 - suavizar 
+#define ALTO 6
+#define ANCHO 5
+#define MAX(a, b) ((a < b)? b : a)
+#define MIN(a, b) ((a < b)? a : b)
+
+int promedio (unsigned char imagen[ALTO][ANCHO], int f_in, int f_fin, int c_in, int c_fin){
+  for (int i = f_in; i < f_fin; i++){
+    for (int j = c)
+  }
+}
+
+void suavizar (unsigned char imagen[ALTO][ANCHO], unsigned int w){
+  if (w < 3 || w % 2 == 0) return;
+
+  for (int i = 0; i < ALTO; i++){
+    int f_inicial = MAX(0, i - w/2);
+    int f_final = MIN(ALTO-1, i + w/2);
+
+    for (int j = 0; j < ANCHO; j++){
+      int c_inicial = MAX(0, j - w/2);
+      int c_final = MIN(ANCHO - 1, j + w/2);
+
+    }
+  }
+}
