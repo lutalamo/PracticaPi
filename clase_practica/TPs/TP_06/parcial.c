@@ -298,8 +298,21 @@ int filaAmiga (unsigned cols, const int v1[], const int v2[]){
   return (i == cols) ? 1 : 0;
 }
 
-int matrizAmiga
+int matrizAmiga (unsigned cols, const int m1[][cols], const int m2[][cols], unsigned fil1, unsigned fil2){
+  for (int i = 0; i < fil1; i++){
+    int flag;
+    for (int j = 0; j < fil2; j++){
+      flag = filaAmiga(cols, m1[i], m2[j]);
+      if (flag) break;
+    }
+    // si se apaga el flag, una fila no es amiga, por ende la matriz no sera amiga
+    if (!flag) return 0;
+  }
+  return 1;
+}
 
-int sonAmigas (unsigned cols, const int m1[][cols], unsigned fil1, const int m2, unsigned fil2){
-
+int sonAmigas (unsigned cols, const int m1[][cols], unsigned fil1, const int m2[][cols], unsigned fil2){
+  if (matrizAmiga(cols, m1, m2, fil1, fil2)) return 1;
+  if (matrizAmiga(cols, m2, m1, fil2, fil1)) return 2;
+  return 0;
 }
